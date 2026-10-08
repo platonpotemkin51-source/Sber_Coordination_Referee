@@ -1,0 +1,58 @@
+"""Development check of task, delivery and dependency relations."""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+import joblib
+import numpy as np
+from referee.data import load_data, fixed_folds, concatenate, CODE_HASH
+from referee.model import RunModel, TurnModel
+from referee.relations import relation_features, RELATIONS_HASH
+from scripts.experiment import report
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--name', default='relations_v5')
+    ap.add_argument('--train', default='data/competition/train.csv')
+    ap.add_argument('--extra-train', default='data/train.csv')
+    ap.add_argument('--validation-fold', type=int, default=1)
+    args = ap.parse_args()
+    start = time.monotonic()
+    data = relation_features(load_data(args.train), args.train)
+    folds = fixed_folds(data)
+    valid = np.flatnonzero(folds == args.validation_fold)
+    training = np.flatnonzero((folds != 0) & (folds != args.validation_fold)) if args.validation_fold else np.flatnonzero(folds != 0)
+    if args.extra_train:
+        extra = relation_features(load_data(args.extra_train), args.extra_train)
+        excluded = set(data['groups'][(folds == 0) | (folds == args.validation_fold)])
+        training = np.concatenate([training, np.array([i for i,g in enumerate(extra['groups']) if g not in excluded])+len(data['y'])])
+        data = concatenate(data, extra)
+    model = RunModel(trees=850).fit(data, training)
+    print('Fitting relation turn model', flush=True)
+    turn_model = TurnModel().fit(data, training)
+    p, ps = model.predict(data, valid)
+    candidates, evidence = turn_model.predict(data, valid)
+    ep = evidence**2; ep /= ep.sum(axis=1, keepdims=True)
+    p = .5*p+.5*ep
+    labels = p.argmax(axis=1); success = (ps >= .45).astype(int)
+    turns = candidates[np.arange(len(valid)), labels]
+    metrics = report(data, valid, labels, success, turns, training)
+    metrics.update(configuration={**vars(args), 'turn_weight':.5, 'turn_power':2}, elapsed_seconds=time.monotonic()-start, features_code_hash=CODE_HASH, relations_hash=RELATIONS_HASH)
+    folder = ROOT/'outputs'/args.name; folder.mkdir(parents=True, exist_ok=True)
+    (folder/'metrics.json').write_text(json.dumps(metrics, indent=2), encoding='utf-8')
+    np.savez_compressed(folder/'validation.npz', idx=valid, label_probabilities=p, success_probabilities=ps, labels=labels, success=success, turns=turns, folds=folds)
+    np.savez_compressed(folder/'turns.npz', candidates=candidates, evidence=evidence)
+    joblib.dump({'run_model':model, 'turn_model':turn_model, 'features_code_hash':CODE_HASH, 'relations_hash':RELATIONS_HASH}, folder/'model.joblib', compress=3)
+    print(json.dumps(metrics, indent=2), flush=True)
+
+
+if __name__ == '__main__':
+    main()

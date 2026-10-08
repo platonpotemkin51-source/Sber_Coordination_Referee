@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.venv-gpu/
+venv/
+predictions.csv
+score.json
+metrics_*/
+data/*.csv
+!data/sample_submission.csv
+.DS_Store
+
+# Local workspace artifacts
+.starter-import/
+starter-main.zip
+outputs/
+*.log
+data/*.zip
+data/competition/
+weights/
+submission*.zip

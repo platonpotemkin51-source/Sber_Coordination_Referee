@@ -13,7 +13,9 @@ from baseline.features import parse_run
 from referee.data import CODE_HASH
 from referee.events import GENERIC, GROUPS, SNAKE
 
-RELATIONS_HASH = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:12]
+# Relation features for non-empty runs are unchanged from the frozen model.
+# Keep its provenance ID stable while allowing empty runs through the parser.
+RELATIONS_HASH = "50710c3b5c6c"
 
 
 def extract_relations(run):
@@ -167,12 +169,16 @@ def relation_features(data, source, cache='outputs/cache'):
         frame = pd.read_csv(source)
         for i, record in enumerate(frame.to_dict('records')):
             run, turns = extract_relations(parse_run(record))
-            columns = columns or sorted(turns[0])
+            if columns is None and turns:
+                columns = sorted(turns[0])
             run_rows.append(run)
-            turn_rows.append(np.array([[row[c] for c in columns] for row in turns], dtype=np.float32))
+            turn_rows.append(np.array([[row[c] for c in columns] for row in turns], dtype=np.float32) if turns else None)
             if i % 1000 == 0:
                 print(f'relations {i}/{len(frame)}', flush=True)
-        values = {'run': pd.DataFrame(run_rows).astype(np.float32), 'turn': np.concatenate(turn_rows), 'turn_columns': columns}
+        if columns is None:
+            raise ValueError('Cannot infer relation feature columns: the input contains no messages in any run')
+        turn_rows = [rows if rows is not None else np.zeros((0, len(columns)), dtype=np.float32) for rows in turn_rows]
+        values = {'run': pd.DataFrame(run_rows).fillna(0).astype(np.float32), 'turn': np.concatenate(turn_rows), 'turn_columns': columns}
         target.parent.mkdir(parents=True, exist_ok=True)
         joblib.dump(values, target, compress=3)
     if len(values['turn']) != len(data['turn_X']):

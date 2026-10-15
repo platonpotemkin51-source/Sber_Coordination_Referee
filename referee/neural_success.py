@@ -35,7 +35,7 @@ def success_probabilities(data, configuration, weights_directory, device='auto')
     network = SequenceNetwork(run.shape[1], turns.shape[1], checkpoint['width']).to(device)
     network.load_state_dict(checkpoint['state'])
     network.eval()
-    indexes = np.arange(len(data['run_id']))
+    indexes = np.flatnonzero(np.diff(data['offsets']) > 0)
     values = []
     with torch.inference_mode():
         for start in range(0, len(indexes), 64):
@@ -43,4 +43,7 @@ def success_probabilities(data, configuration, weights_directory, device='auto')
             batch = tuple(x.to(device) for x in batch_arrays(run, turns, data['offsets'], selected))
             _, success, _ = network(*batch)
             values.append(success.sigmoid().cpu().numpy())
-    return np.concatenate(values)
+    result = np.full(len(data['run_id']), .5, dtype=np.float32)
+    if values:
+        result[indexes] = np.concatenate(values)
+    return result

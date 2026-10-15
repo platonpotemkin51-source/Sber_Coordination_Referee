@@ -20,3 +20,4 @@ data/*.zip
 data/competition/
 weights/
 submission*.zip
+handoff/

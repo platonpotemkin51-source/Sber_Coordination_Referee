@@ -32,14 +32,21 @@ def load_data(path, cache="outputs/cache"):
         if turn_columns is None and turns:
             turn_columns = sorted(turns[0])
         run_rows.append(fr)
-        turn_arrays.append(np.array([[row.get(k,0) for k in turn_columns] for row in turns], dtype=np.float32).reshape(-1,len(turn_columns)))
+        if turns:
+            turn_arrays.append(np.array([[row.get(k,0) for k in turn_columns] for row in turns], dtype=np.float32).reshape(-1,len(turn_columns)))
+        else:
+            turn_arrays.append(None)
         offsets.append(offsets[-1]+len(turns))
         documents.append(doc)
         agent_ids = {a["id"]: j for j,a in enumerate(run["agents"])}
-        signature = [normalize(run["goal"]), run["topology"].get("type"), [(agent_ids.get(m.get("from"),-1), agent_ids.get(m.get("to"),-1), m.get("type"), m.get("intent"), normalize(m.get("text",""))) for m in run["messages"]]]
+        topology_type = run["topology"].get("type") if isinstance(run["topology"], dict) else None
+        signature = [normalize(run["goal"]), topology_type, [(agent_ids.get(m.get("from"),-1), agent_ids.get(m.get("to"),-1), m.get("type"), m.get("intent"), normalize(m.get("text",""))) for m in run["messages"]]]
         groups.append(hashlib.sha256(json.dumps(signature,sort_keys=True).encode()).hexdigest())
         if i % 1000 == 0:
             print(f"features {i}/{len(df)}", flush=True)
+    if turn_columns is None:
+        raise ValueError("Cannot infer turn feature columns: the input contains no messages in any run")
+    turn_arrays = [array if array is not None else np.zeros((0, len(turn_columns)), dtype=np.float32) for array in turn_arrays]
     out = {"X": pd.DataFrame(run_rows).fillna(0).astype(np.float32), "turn_X": np.concatenate(turn_arrays), "turn_columns": turn_columns,
            "offsets": np.array(offsets), "documents": documents, "groups": np.array(groups), "source_sha256":digest,
            "run_id":df.run_id.to_numpy(), "y":np.array([LABELS.index(x) for x in df.label]) if "label" in df else None,

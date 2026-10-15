@@ -1,0 +1,613 @@
+{
+  "date": "2026-10-15",
+  "platform_baseline": 0.91293,
+  "experiments": {
+    "run_lifecycle": {
+      "metrics": {
+        "training_rows": 16000,
+        "new_features": [
+          "life_active_edges_max",
+          "life_active_edges_mean",
+          "life_active_edges_end",
+          "life_cyclic_agents_max",
+          "life_cyclic_agents_mean",
+          "life_cyclic_agents_end",
+          "life_impacted_agents_max",
+          "life_impacted_agents_mean",
+          "life_impacted_agents_end",
+          "life_cycle_age_max",
+          "life_cycle_age_mean",
+          "life_cycle_age_end",
+          "life_oldest_edge_max",
+          "life_oldest_edge_mean",
+          "life_oldest_edge_end",
+          "life_unknown_task_edges_max",
+          "life_unknown_task_edges_mean",
+          "life_unknown_task_edges_end",
+          "life_repeated_wait_edges_max",
+          "life_repeated_wait_edges_mean",
+          "life_repeated_wait_edges_end",
+          "life_cycle_starts",
+          "life_cycle_breaks",
+          "life_longest_cycle_fraction",
+          "life_closed_wait_count",
+          "life_closed_wait_mean",
+          "life_closed_wait_max",
+          "life_resolved_by_artifact",
+          "life_resolved_by_delivery",
+          "life_resolved_by_resumed"
+        ],
+        "group_overlap": 0,
+        "formula": "0.50 macro + 0.25 robustness + 0.15 success + 0.10 hit2",
+        "warning": "Previously reused development slices, not independent unseen holdout.",
+        "baseline": {
+          "check": {
+            "macro_f1": 0.9009860017462471,
+            "robustness_f1": 0.9210873411851885,
+            "success_f1": 0.9418472063854048,
+            "fault_turn_hit2": 0.8805555555555555,
+            "score_proxy": 0.910097472682787
+          },
+          "fold0": {
+            "macro_f1": 0.9088307085863302,
+            "robustness_f1": 0.9227661126820791,
+            "success_f1": 0.9305776364599894,
+            "fault_turn_hit2": 0.8902777777777777,
+            "score_proxy": 0.9137213057104611
+          }
+        },
+        "original": {
+          "alpha_selected": 0.0,
+          "selection_trials": [
+            {
+              "alpha": 0.0,
+              "score": 0.9293150681222473
+            },
+            {
+              "alpha": 0.15,
+              "score": 0.9226097948822924
+            },
+            {
+              "alpha": 0.3,
+              "score": 0.9184746161909491
+            },
+            {
+              "alpha": 0.5,
+              "score": 0.9048517305109888
+            }
+          ],
+          "standalone_check": {
+            "macro_f1": 0.8503463779442609,
+            "robustness_f1": 0.816478421858209,
+            "success_f1": 0.9418472063854048,
+            "fault_turn_hit2": 0.8291666666666667,
+            "score_proxy": 0.8534865420611601
+          },
+          "standalone_fold0": {
+            "macro_f1": 0.883369168308002,
+            "robustness_f1": 0.8661697340801818,
+            "success_f1": 0.9305776364599894,
+            "fault_turn_hit2": 0.8652777777777778,
+            "score_proxy": 0.8843414409208227
+          },
+          "blend_check": {
+            "macro_f1": 0.9009860017462471,
+            "robustness_f1": 0.9210873411851885,
+            "success_f1": 0.9418472063854048,
+            "fault_turn_hit2": 0.8805555555555555,
+            "score_proxy": 0.910097472682787
+          },
+          "blend_fold0": {
+            "macro_f1": 0.9088307085863302,
+            "robustness_f1": 0.9227661126820791,
+            "success_f1": 0.9305776364599894,
+            "fault_turn_hit2": 0.8902777777777777,
+            "score_proxy": 0.9137213057104611
+          },
+          "feature_importance": [
+            [
+              "rel_task_wait_first_mean",
+              1358
+            ],
+            [
+              "event_ack_last",
+              1117
+            ],
+            [
+              "rel_recipient_coordinator_mean",
+              790
+            ],
+            [
+              "rel_intent_body_mismatch_mean",
+              787
+            ],
+            [
+              "event_wait_last",
+              776
+            ],
+            [
+              "event_work_last",
+              748
+            ],
+            [
+              "g_reciprocity",
+              711
+            ],
+            [
+              "rel_sender_tools_mean",
+              651
+            ],
+            [
+              "rel_task_art_before_mean",
+              644
+            ],
+            [
+              "rel_sender_coordinator_mean",
+              630
+            ],
+            [
+              "event_ack_first",
+              629
+            ],
+            [
+              "event_ack_count",
+              621
+            ],
+            [
+              "rel_delivery_mean",
+              621
+            ],
+            [
+              "reply_delay_mean",
+              603
+            ],
+            [
+              "recovered_task_share",
+              596
+            ],
+            [
+              "rel_recipient_assigned_task_mean",
+              596
+            ],
+            [
+              "event_result_first",
+              589
+            ],
+            [
+              "event_work_first",
+              570
+            ],
+            [
+              "event_ack_share",
+              568
+            ],
+            [
+              "goal_ov_delta",
+              567
+            ],
+            [
+              "event_work_bin1",
+              566
+            ],
+            [
+              "event_wait_first",
+              561
+            ],
+            [
+              "event_mean_task_messages",
+              540
+            ],
+            [
+              "event_ack_bin1",
+              522
+            ],
+            [
+              "event_mean_task_assignments",
+              514
+            ],
+            [
+              "event_result_bin3",
+              512
+            ],
+            [
+              "rel_task_known_mean",
+              511
+            ],
+            [
+              "event_work_share",
+              507
+            ],
+            [
+              "rel_assignment_ordinal_mean",
+              504
+            ],
+            [
+              "rel_demand_delivery_target_after_mean",
+              499
+            ],
+            [
+              "event_work_bin2",
+              498
+            ],
+            [
+              "rel_task_repeat_unassigned_mean",
+              497
+            ],
+            [
+              "goal_ov_zero_ratio",
+              493
+            ],
+            [
+              "rel_assignment_mean",
+              480
+            ],
+            [
+              "event_ack_bin0",
+              478
+            ],
+            [
+              "dup_text_ratio",
+              472
+            ],
+            [
+              "rel_own_work_after_mean",
+              472
+            ],
+            [
+              "event_mean_task_undelivered",
+              471
+            ],
+            [
+              "intent_entropy",
+              470
+            ],
+            [
+              "event_result_bin2",
+              465
+            ]
+          ]
+        },
+        "with_lifecycle": {
+          "alpha_selected": 0.0,
+          "selection_trials": [
+            {
+              "alpha": 0.0,
+              "score": 0.9293150681222473
+            },
+            {
+              "alpha": 0.15,
+              "score": 0.9204275722364813
+            },
+            {
+              "alpha": 0.3,
+              "score": 0.916008934586292
+            },
+            {
+              "alpha": 0.5,
+              "score": 0.8998532428126658
+            }
+          ],
+          "standalone_check": {
+            "macro_f1": 0.866624537178482,
+            "robustness_f1": 0.8173160173160172,
+            "success_f1": 0.9418472063854048,
+            "fault_turn_hit2": 0.8458333333333333,
+            "score_proxy": 0.8635016872093894
+          },
+          "standalone_fold0": {
+            "macro_f1": 0.886060009711711,
+            "robustness_f1": 0.8609889501522007,
+            "success_f1": 0.9305776364599894,
+            "fault_turn_hit2": 0.8631944444444445,
+            "score_proxy": 0.8841833323073485
+          },
+          "blend_check": {
+            "macro_f1": 0.9009860017462471,
+            "robustness_f1": 0.9210873411851885,
+            "success_f1": 0.9418472063854048,
+            "fault_turn_hit2": 0.8805555555555555,
+            "score_proxy": 0.910097472682787
+          },
+          "blend_fold0": {
+            "macro_f1": 0.9088307085863302,
+            "robustness_f1": 0.9227661126820791,
+            "success_f1": 0.9305776364599894,
+            "fault_turn_hit2": 0.8902777777777777,
+            "score_proxy": 0.9137213057104611
+          },
+          "feature_importance": [
+            [
+              "event_ack_last",
+              1085
+            ],
+            [
+              "rel_task_wait_first_mean",
+              947
+            ],
+            [
+              "rel_recipient_coordinator_mean",
+              749
+            ],
+            [
+              "g_reciprocity",
+              720
+            ],
+            [
+              "event_work_last",
+              719
+            ],
+            [
+              "rel_intent_body_mismatch_mean",
+              715
+            ],
+            [
+              "rel_sender_tools_mean",
+              660
+            ],
+            [
+              "rel_sender_coordinator_mean",
+              650
+            ],
+            [
+              "rel_task_art_before_mean",
+              643
+            ],
+            [
+              "event_result_first",
+              639
+            ],
+            [
+              "event_ack_first",
+              617
+            ],
+            [
+              "event_work_first",
+              614
+            ],
+            [
+              "goal_ov_delta",
+              613
+            ],
+            [
+              "event_ack_count",
+              600
+            ],
+            [
+              "rel_recipient_assigned_task_mean",
+              596
+            ],
+            [
+              "event_work_share",
+              591
+            ],
+            [
+              "rel_delivery_mean",
+              563
+            ],
+            [
+              "rel_task_known_mean",
+              556
+            ],
+            [
+              "event_ack_bin1",
+              551
+            ],
+            [
+              "event_mean_task_assignments",
+              547
+            ],
+            [
+              "event_wait_last",
+              546
+            ],
+            [
+              "recovered_task_share",
+              536
+            ],
+            [
+              "event_ack_share",
+              529
+            ],
+            [
+              "reply_delay_mean",
+              522
+            ],
+            [
+              "event_mean_task_messages",
+              516
+            ],
+            [
+              "event_work_bin2",
+              514
+            ],
+            [
+              "event_work_bin1",
+              507
+            ],
+            [
+              "goal_ov_zero_ratio",
+              498
+            ],
+            [
+              "rel_demand_delivery_target_after_mean",
+              489
+            ],
+            [
+              "share_inform",
+              480
+            ],
+            [
+              "intent_entropy",
+              480
+            ],
+            [
+              "rel_assignment_ordinal_mean",
+              479
+            ],
+            [
+              "rel_task_repeat_unassigned_mean",
+              478
+            ],
+            [
+              "goal_ov_tail",
+              475
+            ],
+            [
+              "rel_own_repeat_after_mean",
+              472
+            ],
+            [
+              "event_ack_bin0",
+              469
+            ],
+            [
+              "state_alternating_flips",
+              467
+            ],
+            [
+              "event_result_bin3",
+              466
+            ],
+            [
+              "life_active_edges_end",
+              462
+            ],
+            [
+              "rel_task_repeat_first_mean",
+              455
+            ]
+          ]
+        },
+        "seconds": 34.16561937506776,
+        "extractor_sha256": "020e4b4aa4b468ce124cf823712d0e392559258b0be74333ee12bd1a72366abb"
+      },
+      "decision": "reject_for_submission; selection chose zero blend weight"
+    },
+    "pair_lifecycle": {
+      "metrics": {
+        "training_rows": 16000,
+        "eligible_pairs": 15909,
+        "original_columns": 1504,
+        "added_columns": 117,
+        "group_overlap": 0,
+        "warning": "Reused development splits; not new independent holdouts.",
+        "original_pair": {
+          "alpha": 0.0,
+          "selection_trials": [
+            {
+              "alpha": 0.0,
+              "score": 0.9293150681222473
+            },
+            {
+              "alpha": 0.15,
+              "score": 0.9211888059957468
+            },
+            {
+              "alpha": 0.3,
+              "score": 0.9152062069804027
+            },
+            {
+              "alpha": 0.5,
+              "score": 0.910814994245297
+            },
+            {
+              "alpha": 0.75,
+              "score": 0.9007354091662697
+            }
+          ],
+          "eligible_pair_accuracy_dev_fold0": [
+            0.8995479658463084,
+            0.91921726041144
+          ],
+          "standalone_check": {
+            "macro_f1": 0.8767434489228764,
+            "robustness_f1": 0.8999632285346572,
+            "success_f1": 0.9418472063854048,
+            "fault_turn_hit2": 0.8569444444444444,
+            "score_proxy": 0.8903340569973577
+          },
+          "standalone_fold0": {
+            "macro_f1": 0.9060107991291327,
+            "robustness_f1": 0.9174346616105582,
+            "success_f1": 0.9305776364599894,
+            "fault_turn_hit2": 0.8895833333333333,
+            "score_proxy": 0.9109090437695376
+          },
+          "blend_check": {
+            "macro_f1": 0.9009860017462471,
+            "robustness_f1": 0.9210873411851885,
+            "success_f1": 0.9418472063854048,
+            "fault_turn_hit2": 0.8805555555555555,
+            "score_proxy": 0.910097472682787
+          },
+          "blend_fold0": {
+            "macro_f1": 0.9088307085863302,
+            "robustness_f1": 0.9227661126820791,
+            "success_f1": 0.9305776364599894,
+            "fault_turn_hit2": 0.8902777777777777,
+            "score_proxy": 0.9137213057104611
+          }
+        },
+        "temporal_pair": {
+          "alpha": 0.0,
+          "selection_trials": [
+            {
+              "alpha": 0.0,
+              "score": 0.9293150681222473
+            },
+            {
+              "alpha": 0.15,
+              "score": 0.9224878673693168
+            },
+            {
+              "alpha": 0.3,
+              "score": 0.9152062069804027
+            },
+            {
+              "alpha": 0.5,
+              "score": 0.9081958157077383
+            },
+            {
+              "alpha": 0.75,
+              "score": 0.9002218161846016
+            }
+          ],
+          "eligible_pair_accuracy_dev_fold0": [
+            0.8990457056755399,
+            0.916708479678876
+          ],
+          "standalone_check": {
+            "macro_f1": 0.8764712584628107,
+            "robustness_f1": 0.9155518564333336,
+            "success_f1": 0.9418472063854048,
+            "fault_turn_hit2": 0.8569444444444444,
+            "score_proxy": 0.8940951187419939
+          },
+          "standalone_fold0": {
+            "macro_f1": 0.9036486221698483,
+            "robustness_f1": 0.9324821206509134,
+            "success_f1": 0.9305776364599894,
+            "fault_turn_hit2": 0.8868055555555555,
+            "score_proxy": 0.9132120422722064
+          },
+          "blend_check": {
+            "macro_f1": 0.9009860017462471,
+            "robustness_f1": 0.9210873411851885,
+            "success_f1": 0.9418472063854048,
+            "fault_turn_hit2": 0.8805555555555555,
+            "score_proxy": 0.910097472682787
+          },
+          "blend_fold0": {
+            "macro_f1": 0.9088307085863302,
+            "robustness_f1": 0.9227661126820791,
+            "success_f1": 0.9305776364599894,
+            "fault_turn_hit2": 0.8902777777777777,
+            "score_proxy": 0.9137213057104611
+          }
+        },
+        "seconds": 19.86570208403282
+      },
+      "decision": "reject_for_submission; selection chose zero blend weight"
+    }
+  }
+}

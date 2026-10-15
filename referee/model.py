@@ -67,7 +67,8 @@ class TurnModel:
         return self
 
     def predict(self,data,idx,window=2):
-        selections=np.concatenate([np.arange(*data["offsets"][i:i+2]) for i in idx if data["offsets"][i+1] > data["offsets"][i]])
+        blocks=[np.arange(*data["offsets"][i:i+2]) for i in idx if data["offsets"][i+1] > data["offsets"][i]]
+        selections=np.concatenate(blocks) if blocks else np.empty(0,dtype=int)
         columns=getattr(self,"turn_columns",data["turn_columns"])
         feature_indexes=[data["turn_columns"].index(c) for c in columns]
         p=(self.clf.predict_proba(data["turn_X"][selections][:,feature_indexes])

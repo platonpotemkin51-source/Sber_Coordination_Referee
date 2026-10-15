@@ -1,0 +1,215 @@
+{
+  "archive": "submission-v15-runtime-fixed-20261015.zip",
+  "sha256": "7cf3b313a1e0d9b8f61e06504cbc33296797c28bc877a02877836bbe765297e6",
+  "bytes": 37391370,
+  "unchanged_weight_files": 5,
+  "integration_cases_passed": 27,
+  "unit_tests_passed": 48,
+  "unit_tests_skipped": 5,
+  "excluded_test_file": "tests/test_templates.py (optional drain3 experiment)",
+  "full_predictions_equal_across_sklearn": true,
+  "full_predictions_unchanged_after_cpu_fallback": true,
+  "environments": {
+    "sklearn152": {
+      "python": "3.12.10 (v3.12.10:0cc81280367, Apr  8 2025, 08:46:59) [Clang 13.0.0 (clang-1300.0.29.30)]",
+      "dependencies": {
+        "numpy": "2.5.4",
+        "pandas": "2.3.3",
+        "scipy": "1.18.1",
+        "scikit-learn": "1.5.2",
+        "lightgbm": "4.7.0",
+        "torch": "2.5.1"
+      },
+      "cases": {
+        "reduced_2000": {
+          "rows": 2000,
+          "seconds": 0.351,
+          "returncode": 0
+        },
+        "empty_file": {
+          "rows": 0,
+          "seconds": 0.346,
+          "returncode": 0
+        },
+        "empty_messages": {
+          "rows": 3,
+          "seconds": 0.336,
+          "returncode": 0
+        },
+        "null_messages": {
+          "rows": 3,
+          "seconds": 0.344,
+          "returncode": 0
+        },
+        "small_real": {
+          "rows": 3,
+          "seconds": 2.118,
+          "returncode": 0
+        },
+        "mixed_empty": {
+          "rows": 3,
+          "seconds": 2.047,
+          "returncode": 0
+        },
+        "lost_telemetry": {
+          "rows": 3,
+          "seconds": 2.02,
+          "returncode": 0
+        },
+        "string_ids": {
+          "rows": 3,
+          "seconds": 0.336,
+          "returncode": 0
+        },
+        "full_test": {
+          "rows": 4000,
+          "seconds": 57.974,
+          "returncode": 0
+        }
+      },
+      "full_label_counts": {
+        "clean": 1120,
+        "deadlock": 514,
+        "runaway_loop": 512,
+        "goal_drift": 510,
+        "conflict": 485,
+        "duplicated_work": 436,
+        "dropped_handoff": 423
+      }
+    },
+    "sklearn180": {
+      "python": "3.12.10 (v3.12.10:0cc81280367, Apr  8 2025, 08:46:59) [Clang 13.0.0 (clang-1300.0.29.30)]",
+      "dependencies": {
+        "numpy": "2.5.4",
+        "pandas": "2.3.3",
+        "scipy": "1.18.1",
+        "scikit-learn": "1.8.0",
+        "lightgbm": "4.7.0",
+        "torch": "2.5.1"
+      },
+      "cases": {
+        "reduced_2000": {
+          "rows": 2000,
+          "seconds": 0.352,
+          "returncode": 0
+        },
+        "empty_file": {
+          "rows": 0,
+          "seconds": 0.349,
+          "returncode": 0
+        },
+        "empty_messages": {
+          "rows": 3,
+          "seconds": 0.346,
+          "returncode": 0
+        },
+        "null_messages": {
+          "rows": 3,
+          "seconds": 0.341,
+          "returncode": 0
+        },
+        "small_real": {
+          "rows": 3,
+          "seconds": 2.161,
+          "returncode": 0
+        },
+        "mixed_empty": {
+          "rows": 3,
+          "seconds": 2.067,
+          "returncode": 0
+        },
+        "lost_telemetry": {
+          "rows": 3,
+          "seconds": 1.969,
+          "returncode": 0
+        },
+        "string_ids": {
+          "rows": 3,
+          "seconds": 0.291,
+          "returncode": 0
+        },
+        "full_test": {
+          "rows": 4000,
+          "seconds": 57.624,
+          "returncode": 0
+        }
+      },
+      "full_label_counts": {
+        "clean": 1120,
+        "deadlock": 514,
+        "runaway_loop": 512,
+        "goal_drift": 510,
+        "conflict": 485,
+        "duplicated_work": 436,
+        "dropped_handoff": 423
+      }
+    },
+    "no-torch": {
+      "python": "3.12.10 (v3.12.10:0cc81280367, Apr  8 2025, 08:46:59) [Clang 13.0.0 (clang-1300.0.29.30)]",
+      "dependencies": {
+        "numpy": "2.5.4",
+        "pandas": "2.3.3",
+        "scipy": "1.18.1",
+        "scikit-learn": "1.5.2",
+        "lightgbm": "4.7.0",
+        "torch": null
+      },
+      "cases": {
+        "reduced_2000": {
+          "rows": 2000,
+          "seconds": 0.351,
+          "returncode": 0
+        },
+        "empty_file": {
+          "rows": 0,
+          "seconds": 0.344,
+          "returncode": 0
+        },
+        "empty_messages": {
+          "rows": 3,
+          "seconds": 0.347,
+          "returncode": 0
+        },
+        "null_messages": {
+          "rows": 3,
+          "seconds": 0.297,
+          "returncode": 0
+        },
+        "small_real": {
+          "rows": 3,
+          "seconds": 1.381,
+          "returncode": 0
+        },
+        "mixed_empty": {
+          "rows": 3,
+          "seconds": 1.354,
+          "returncode": 0
+        },
+        "lost_telemetry": {
+          "rows": 3,
+          "seconds": 1.413,
+          "returncode": 0
+        },
+        "string_ids": {
+          "rows": 3,
+          "seconds": 0.345,
+          "returncode": 0
+        },
+        "full_test": {
+          "rows": 4000,
+          "seconds": 51.067,
+          "returncode": 0
+        }
+      },
+      "full_label_counts": {
+        "clean": 1113,
+        "goal_drift": 526,
+        "deadlock": 519,
+        "conflict": 502,
+        "runaway_loop": 496,
+        "duplicated_work": 433,
+        "dropped_handoff": 411
+      }
+    }
+  }
+}

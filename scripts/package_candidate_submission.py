@@ -14,7 +14,7 @@ HANDOFF = ROOT / "handoff/v15/assembled"
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", default="outputs/submission-v15-wordchar-0910.zip")
+    parser.add_argument("--output", default="outputs/submission-v15-runtime-fixed-20261015.zip")
     args = parser.parse_args()
     output = (ROOT / args.output).resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -40,6 +40,8 @@ def main() -> None:
 Run with the competition contract: `python solution.py --train train.csv --test test.csv --output predictions.csv`.
 
 This archive keeps the colleague's frozen v15 weights and adds its validated v9 ranker, sequence_v6 class checkpoint, and word+char TF-IDF model. Models are frozen; inference does not train or use network access. PyTorch 2.5.1 is required by the sequence component; CPU inference is the default and `--device cuda` is optional.
+
+Choose the platform GPU image (includes PyTorch 2.5.1) for the complete ensemble, even with default CPU inference. If PyTorch is absent, the entry point uses frozen tree, selector, ranker and text models with tree success; the local metrics below do not describe that reduced ensemble. Reduced smoke inputs without run columns produce clean/1/-1 before model imports, as specified by the competition FAQ. Individual runs without messages use the same fallback. sklearn 1.5.2 compatibility is handled for the frozen multinomial logistic model.
 
 The best local score proxies are 0.919870 development, 0.910097 check-half, and 0.913721 fold 0. They are not official platform scores; the check-half and fold 0 have informed model development. See `candidate_metrics.json` for component details and `validation.json` for the original v15 validation record.
 """

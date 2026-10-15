@@ -50,11 +50,12 @@ def predict_sequence(data, checkpoint_path, device="cpu"):
 
 
 def infer_candidate(bundle, ranker, data, weights_directory, sequence_checkpoint,
-                    neural_device="cpu", text_model_path=None):
+                    neural_device="cpu", text_model_path=None, use_neural=True):
     from referee.data import LABELS
     from referee.neural_success import success_probabilities
 
     indexes = np.arange(len(data["run_id"]))
+    print("Predicting run and turn models", flush=True)
     run_p, tree_success = bundle["run_model"].predict(data, indexes)
     candidates, evidence = bundle["turn_model"].predict(data, indexes)
     evidence_p = evidence ** bundle.get("turn_power", 2)
@@ -62,6 +63,7 @@ def infer_candidate(bundle, ranker, data, weights_directory, sequence_checkpoint
     base = ((1 - bundle.get("turn_weight", .5)) * run_p
             + bundle.get("turn_weight", .5) * evidence_p)
 
+    print("Predicting pair selector and ranker", flush=True)
     pair_p = bundle["pair_selector"].predict(data, indexes, run_p, evidence, candidates)
     pair_class = (1 - PAIR_CLASS_GATE[None, :]) * base + PAIR_CLASS_GATE[None, :] * pair_p
     pair_class /= np.maximum(pair_class.sum(1, keepdims=True), 1e-12)
@@ -72,20 +74,28 @@ def infer_candidate(bundle, ranker, data, weights_directory, sequence_checkpoint
     v15_v9 = (1 - V9_CLASS_GATE[None, :]) * v15 + V9_CLASS_GATE[None, :] * v9
     v15_v9 /= np.maximum(v15_v9.sum(1, keepdims=True), 1e-12)
 
-    sequence = predict_sequence(data, sequence_checkpoint, neural_device)
-    probabilities = ((1 - SEQUENCE_CLASS_GATE[None, :]) * v15_v9
-                     + SEQUENCE_CLASS_GATE[None, :] * sequence)
-    probabilities /= np.maximum(probabilities.sum(1, keepdims=True), 1e-12)
+    probabilities = v15_v9.copy()
     has_turns = np.diff(data["offsets"]) > 0
-    probabilities[~has_turns] = v15_v9[~has_turns]
+    if use_neural:
+        print("Predicting sequence classes", flush=True)
+        sequence = predict_sequence(data, sequence_checkpoint, neural_device)
+        probabilities = ((1 - SEQUENCE_CLASS_GATE[None, :]) * v15_v9
+                         + SEQUENCE_CLASS_GATE[None, :] * sequence)
+        probabilities /= np.maximum(probabilities.sum(1, keepdims=True), 1e-12)
+        probabilities[~has_turns] = v15_v9[~has_turns]
 
     if text_model_path is not None:
+        print("Predicting word+char classes", flush=True)
         text_bundle = joblib.load(text_model_path)
         word_features = text_bundle["word_vectorizer"].transform(data["documents"])
         char_features = text_bundle["char_vectorizer"].transform(data["documents"])
         from scipy.sparse import hstack
         text_features = hstack([word_features, char_features], format="csr")
         text_model = text_bundle["models"]["word_char"]
+        # sklearn 1.8 removed this attribute; 1.5.2 still reads it in predict_proba.
+        # The frozen seven-class lbfgs model was trained with multinomial loss.
+        if not hasattr(text_model, "multi_class"):
+            text_model.multi_class = "multinomial"
         text_probability = text_model.predict_proba(text_features)
         if not np.array_equal(text_model.classes_, np.arange(probabilities.shape[1])):
             raise ValueError("word+char model class order does not match the referee labels")
@@ -93,7 +103,8 @@ def infer_candidate(bundle, ranker, data, weights_directory, sequence_checkpoint
                          + WORD_CHAR_CLASS_GATE[None, :] * text_probability)
         probabilities /= np.maximum(probabilities.sum(1, keepdims=True), 1e-12)
 
-    if bundle.get("neural_success"):
+    if use_neural and bundle.get("neural_success"):
+        print("Predicting neural success", flush=True)
         success_p = success_probabilities(data, bundle["neural_success"],
             weights_directory, neural_device)
         success_p[~has_turns] = tree_success[~has_turns]

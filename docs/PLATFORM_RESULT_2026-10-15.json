@@ -1,0 +1,15 @@
+{
+  "reported_date": "2026-10-15",
+  "source": "User-reported platform results in this conversation",
+  "metrics": {
+    "score": 0.91293,
+    "macro_f1": 0.90994,
+    "robustness_f1": 0.91946,
+    "success_f1": 0.9248,
+    "fault_turn_hit2": 0.89375
+  },
+  "recomputed_score": 0.9129299999999999,
+  "archive": "outputs/releases/submission-score-0.91293-7cf3b313.zip",
+  "sha256": "7cf3b313a1e0d9b8f61e06504cbc33296797c28bc877a02877836bbe765297e6",
+  "note": "Runtime image used for the upload was not reported; local metrics are separate."
+}
